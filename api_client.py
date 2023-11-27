@@ -2,34 +2,35 @@ import requests
 
 
 class ApiClient:
-    def __init__(self, client_id, client_secret, access_token=None):
+    def __init__(self, client_id, client_secret):
         self.client_id = client_id
         self.client_secret = client_secret
-        self.access_token = access_token
-
-    def get_headers(self):
-        headers = {
+        self.access_token = None
+        self.headers = {
             "Authorization": f"Client-ID {self.client_id}"
         }
-        if self.access_token:
-            headers["Authorization"] = f"Bearer {self.access_token}"
-        return headers
+
+    def auth(self, access_token):
+        self.access_token = access_token
+        self.headers["Authorization"] = f"Bearer {self.access_token}"
+
+    def __base_call(self, method, url, params=None, data=None, json=None):
+        resp = requests.request(method, url, headers=self.headers, params=params, data=data, json=json)
+        # resp.raise_for_status()
+        assert resp.status_code == 200
+        return resp.json()
 
     def get(self, url, params=None):
-        response = requests.get(url, headers=self.get_headers(), params=params)
-        return response.json()
+        return self.__base_call("get", url, params=params)
 
     def post(self, url, data=None, json=None):
-        response = requests.post(url, headers=self.get_headers(), data=data, json=json)
-        return response.json()
+        return self.__base_call("post", url, data=data, json=json)
 
     def put(self, url, data=None, json=None):
-        response = requests.put(url, headers=self.get_headers(), data=data, json=json)
-        return response.json()
+        return self.__base_call("put", url, data=data, json=json)
 
     def delete(self, url):
-        response = requests.delete(url, headers=self.get_headers())
-        return response.status_code == 200
+        return self.__base_call("delete", url)
 
 
 if __name__ == "__main__":
@@ -38,11 +39,13 @@ if __name__ == "__main__":
     client_secret = "client_secret"
     access_token = "access_token"
 
-    api = ApiClient(client_id, client_secret, access_token)
+    api = ApiClient(client_id, client_secret)
+    api.auth(access_token=access_token)
 
     # Пример запроса GET
     image_hash = "nK9EbaU"
-    response = api.get(f"https://api.imgur.com/3/image/{image_hash}")
+    # response = api.get(f"https://api.imgur.com/3/image/{image_hash}")
+    response = api.get("https://api.imgur.com/3/account/me/images")  # GET Account Images
     print(response)
     print()
 
