@@ -45,12 +45,12 @@ if __name__ == "__main__":
     api = ApiClient(login, password)
 
     # Регистрация нового пользователя
-    # json_data = {
-    #     "login": api.login,
-    #     "pass": api.password
-    # }
-    # resp = api.post("http://85.192.34.140:8080/api/signup", json=json_data)
-    # print(resp)
+    json_data = {
+        "login": api.login,
+        "pass": api.password
+    }
+    resp = api.post("http://85.192.34.140:8080/api/signup", json=json_data)
+    print(resp)
 
     # Получение токена
     json_data = {
@@ -71,5 +71,9 @@ if __name__ == "__main__":
     # Показать всех существующих пользователей (10)
     users_info_resp = api.get("http://85.192.34.140:8080/api/users")
     print(users_info_resp[:10])
+
+    # Удаление пользователя
+    delete_user_resp = api.delete("http://85.192.34.140:8080/api/user")
+    print(delete_user_resp)
 
 
