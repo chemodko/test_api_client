@@ -1,12 +1,14 @@
 import requests
-import time
 
 
 class ApiClient:
     def __init__(self, login: str, password: str, headers: dict = None, token: str = None):
         self.login = login
         self.password = password
-        self.headers = headers
+        if headers:
+            self.headers = headers
+        else:
+            self.headers = dict()
         self.token = token
         self.session = requests.Session()
 
@@ -22,9 +24,7 @@ class ApiClient:
     def auth(self) -> None:
         """Calls log_in method and sets the authorization headers."""
         self.__log_in()
-        self.headers = {
-             "Authorization": f"Bearer {self.token}"
-        }
+        self.headers["Authorization"] = f"Bearer {self.token}"
 
     def __base_call(self, method: str, url: str, params: dict = None, data: dict = None, json: dict = None, status_code: int = 200) -> dict:
         """
