@@ -18,7 +18,7 @@ class ApiClient:
             "username": self.login,
             "password": self.password
         }
-        token_resp = api.post("http://85.192.34.140:8080/api/login", json=log_in_data, status_code=200)
+        token_resp = self.post("http://85.192.34.140:8080/api/login", json=log_in_data, status_code=200)
         self.set_token(token_resp["token"])
 
     def auth(self) -> None:
