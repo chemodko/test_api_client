@@ -1,10 +1,9 @@
 import requests
-from settings import Settings
+from settings import base_settings
 
 
 class ApiClient:
-    def __init__(self, settings: Settings, headers: dict = None, token: str = None):
-        self.settings = settings
+    def __init__(self, headers: dict = None, token: str = None):
         self.headers = headers or {}
         self.token = token
         self.session = requests.Session()
@@ -12,10 +11,10 @@ class ApiClient:
     def __log_in(self) -> None:
         """Gets token, logs in to the API and sets the obtained token."""
         log_in_data = {
-            "username": self.settings.login,
-            "password": self.settings.password
+            "username": base_settings.login,
+            "password": base_settings.password
         }
-        token_resp = self.post(f"{self.settings.base_url}/login", json=log_in_data, status_code=200)
+        token_resp = self.post(f"{base_settings.base_url}/login", json=log_in_data, status_code=200)
         self.set_token(token_resp["token"])
 
     def auth(self) -> None:
@@ -70,35 +69,35 @@ class ApiClient:
         return self.__base_call("delete", url, data=data, json=json, status_code=status_code)
 
 
-if __name__ == "__main__":
-    login = "chemodko"
-    password = "password"
-    base_url = "http://85.192.34.140:8080/api"
-    settings = Settings(login=login, password=password, base_url=base_url)
-    api = ApiClient(settings=settings)
+# if __name__ == "__main__":
+    # login = "chemodko"
+    # password = "password"
+    # base_url = "http://85.192.34.140:8080/api"
+    # settings = Settings()
+    # api = ApiClient(settings=base_settings)
 
-    # Регистрация нового пользователя
-    json_data = {
-        "login": api.settings.login,
-        "pass": api.settings.password
-    }
-    resp = api.post(f"{base_url}/signup", json=json_data, status_code=201)
-    print("User registration:\n", resp)
-
-    # Авторизация
-    api.auth()
-
-    # Получение информации о пользователе
-    user_info_resp = api.get(f"{base_url}/user", status_code=200)
-    print("User info:\n", user_info_resp)
-
-    # Показать всех существующих пользователей (10)
-    users_info_resp = api.get(f"{base_url}/users", status_code=200)
-    print("Users info:\n", users_info_resp[:10])
-
-    # Удаление пользователя
-    delete_user_resp = api.delete(f"{base_url}/user", status_code=200)
-    print("User deletion:\n", delete_user_resp)
+    # # Регистрация нового пользователя
+    # json_data = {
+    #     "login": api.settings.login,
+    #     "pass": api.settings.password
+    # }
+    # resp = api.post(f"{base_url}/signup", json=json_data, status_code=201)
+    # print("User registration:\n", resp)
+    #
+    # # Авторизация
+    # api.auth()
+    #
+    # # Получение информации о пользователе
+    # user_info_resp = api.get(f"{base_url}/user", status_code=200)
+    # print("User info:\n", user_info_resp)
+    #
+    # # Показать всех существующих пользователей (10)
+    # users_info_resp = api.get(f"{base_url}/users", status_code=200)
+    # print("Users info:\n", users_info_resp[:10])
+    #
+    # # Удаление пользователя
+    # delete_user_resp = api.delete(f"{base_url}/user", status_code=200)
+    # print("User deletion:\n", delete_user_resp)
 
 
 
