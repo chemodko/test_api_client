@@ -4,10 +4,10 @@ from utils.clients.http_api_client import HttpApiClient
 
 class UserControllerApiClient(HttpApiClient):
     # Регистрация нового пользователя
-    def post_new_user(self) -> UserDTOResponse:
+    def post_new_user(self, login: str, password: str) -> UserDTOResponse:
         json_data = {
-            "login": self.login,
-            "pass": self.password
+            "login": login,
+            "pass": password
         }
         resp = self.post(f"{self.base_url}/signup", json=json_data, status_code=201)
         return UserDTOResponse(**resp)
@@ -34,4 +34,5 @@ class UserControllerApiClient(HttpApiClient):
     # Показать логины всех существующих пользователей
     def get_users_info(self) -> UsersInfoResponse:
         resp = self.get(f"{self.base_url}/users", status_code=200)
-        return UsersInfoResponse(**resp)
+        resp_dict = {"response": resp}
+        return UsersInfoResponse(**resp_dict)

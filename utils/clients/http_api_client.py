@@ -71,5 +71,11 @@ class HttpApiClient:
         """Makes a DELETE request."""
         return self.__base_call("delete", url, data=data, json=json, status_code=status_code)
 
+    def __str__(self):
+        return f"TOKEN: {self.token}\n" \
+               f"URL: {self.base_url}\n" \
+               f"LOGIN: {self.login}\n" \
+               f"PASSWORD: {self.password}\n"
+
 
 
