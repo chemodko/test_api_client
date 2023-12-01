@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class APIRoutes(str, Enum):
+class ApiRoutes(str, Enum):
     LOGIN = "/login"
     SIGNUP = "/signup"
     USER = "/user"
