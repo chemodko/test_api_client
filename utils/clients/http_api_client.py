@@ -8,8 +8,8 @@ class HttpApiClient:
         self.token = token
         self.session = requests.Session()
         self.base_url = base_settings.base_url
-        self.login = base_settings.test_user.login
-        self.password = base_settings.test_user.password
+        self.login = base_settings.login
+        self.password = base_settings.password
 
     def __log_in(self) -> None:
         """Gets token, logs in to the API and sets the obtained token."""
