@@ -1,12 +1,20 @@
 from pydantic import BaseModel, Field
-from utils.constants.messages import StatusMessage, UserMessage
+from src.utils.constants.messages import StatusMessage, UserMessage
+
+
+class Game(BaseModel):
+    pass
+
+
+class Games(BaseModel):  # list of dicts
+    games: list[Game]
 
 
 class RegisterData(BaseModel):
     id: int
     login: str
     password: str = Field(alias="pass")
-    games: list
+    games: list  # TODO: Games
 
 
 class Info(BaseModel):
@@ -36,14 +44,3 @@ class UserDeleteInfoResponse(BaseModel):
 
 class UsersInfoResponse(BaseModel):
     response: list
-
-
-
-
-
-
-
-
-
-
-

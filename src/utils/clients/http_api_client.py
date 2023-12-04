@@ -1,5 +1,5 @@
 import requests
-from settings import base_settings
+from src.settings import base_settings
 
 
 class HttpApiClient:

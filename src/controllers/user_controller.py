@@ -1,13 +1,16 @@
-from models_responses.user_controller import *
-from utils.clients.http_api_client import HttpApiClient
+from src.models.user_controller import *
+from src.utils.clients.http_api_client import HttpApiClient
 
 
 class UserControllerApiClient(HttpApiClient):
     # Регистрация нового пользователя
-    def post_new_user(self, login: str, password: str) -> UserDTOResponse:
+    def post_new_user(self, login: str = None, password: str = None) -> UserDTOResponse:
+        if login and password:
+            self.login = login
+            self.password = password
         json_data = {
-            "login": login,
-            "pass": password
+            "login": self.login,
+            "pass": self.password
         }
         resp = self.post(f"{self.base_url}/signup", json=json_data, status_code=201)
         return UserDTOResponse(**resp)

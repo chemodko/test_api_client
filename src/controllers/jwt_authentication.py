@@ -1,5 +1,5 @@
-from utils.clients.http_api_client import HttpApiClient
-from models_responses.jwt_authentication_controller import AuthenticationResponse
+from src.utils.clients.http_api_client import HttpApiClient
+from src.models.jwt_authentication import AuthenticationResponse
 
 
 class JwtAuthenticationApiClient(HttpApiClient):
