@@ -38,7 +38,3 @@ class Game(BaseModel):
     title: str
 
 
-class Games(BaseModel):
-    games: list[Game]
-
-
