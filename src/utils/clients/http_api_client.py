@@ -20,10 +20,10 @@ class HttpApiClient:
         token_resp = self.post(f"{self.base_url}/login", json=log_in_data, status_code=200)
         self.set_token(token_resp["token"])
 
-    def can_auth(self) -> bool:
+    def can_auth(self, login: str = None, password: str = None) -> bool:
         log_in_data = {
-            "username": self.login,
-            "password": self.password
+            "username": login,
+            "password": password
         }
         status_code = self.session.request("post", f"{self.base_url}/login", json=log_in_data).status_code
         return status_code == 200
@@ -53,7 +53,7 @@ class HttpApiClient:
         AssertionError: If the response status code is not the expected status_code.
         """
         resp = self.session.request(method, url, headers=self.headers, params=params, data=data, json=json)
-        assert resp.status_code == status_code, f"Status code: {resp.status_code}"
+        assert resp.status_code == status_code, f"Status code: {resp.status_code}, {resp.text}"
         return resp.json()
 
     def set_token(self, token: str) -> None:
@@ -81,7 +81,7 @@ class HttpApiClient:
         return self.__base_call("delete", url, data=data, json=json, status_code=status_code)
 
     def __str__(self):
-        return f"TOKEN: {self.token}\n" \
+        return f"\nTOKEN: {self.token}\n" \
                f"URL: {self.base_url}\n" \
                f"LOGIN: {self.login}\n" \
                f"PASSWORD: {self.password}\n"

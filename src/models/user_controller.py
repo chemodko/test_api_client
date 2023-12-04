@@ -42,11 +42,21 @@ class UserInfoResponse(BaseModel):
 
 
 class UserNewPasswordResponse(BaseModel):
-    info: dict
+    info: Info = None
+
+    timestamp: str = None
+    status: int = 401
+    error: str = "Unauthorized"
+    path: str = "/api/user"
 
 
 class UserDeleteInfoResponse(BaseModel):
-    info: dict
+    info: Info = None
+
+    timestamp: str = None
+    status: int = 401
+    error: str = "Unauthorized"
+    path: str = "/api/user"
 
 
 class UsersInfoResponse(BaseModel):

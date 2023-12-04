@@ -24,13 +24,16 @@ class UserControllerApiClient(HttpApiClient):
         json_data = {
             "password": new_password
         }
+        if status_code == 200:
+            self.password = new_password
         resp = self.put(f"{self.base_url}/user", json=json_data, status_code=status_code)
-        self.password = new_password
         return UserNewPasswordResponse(**resp)
 
     def delete_user(self, status_code: int = 200) -> UserDeleteInfoResponse:
         """Deleting a user from the database (must be authorized with a token)."""
         resp = self.delete(f"{self.base_url}/user", status_code=status_code)
+        if status_code == 200:
+            self.headers = None
         return UserDeleteInfoResponse(**resp)
 
     def get_users_info(self, status_code: int = 200) -> UsersInfoResponse:
