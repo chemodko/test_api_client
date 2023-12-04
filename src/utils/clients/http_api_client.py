@@ -20,10 +20,10 @@ class HttpApiClient:
         token_resp = self.post(f"{self.base_url}/login", json=log_in_data, status_code=200)
         self.set_token(token_resp["token"])
 
-    def can_auth(self, login: str = None, password: str = None) -> bool:
+    def can_auth(self) -> bool:
         log_in_data = {
-            "username": login,
-            "password": password
+            "username": self.login,
+            "password": self.password
         }
         status_code = self.session.request("post", f"{self.base_url}/login", json=log_in_data).status_code
         return status_code == 200
