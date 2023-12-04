@@ -3,39 +3,38 @@ from src.utils.clients.http_api_client import HttpApiClient
 
 
 class UserControllerApiClient(HttpApiClient):
-    # Регистрация нового пользователя
-    def post_new_user(self, login: str = None, password: str = None) -> UserDTOResponse:
-        if login and password:
-            self.login = login
-            self.password = password
+    def post_new_user(self, login: str = None, password: str = None, status_code: int = 201) -> UserDTOResponse:
+        """Registration of a new user in the system."""
+        self.login = login
+        self.password = password
         json_data = {
             "login": self.login,
             "pass": self.password
         }
-        resp = self.post(f"{self.base_url}/signup", json=json_data, status_code=201)
+        resp = self.post(f"{self.base_url}/signup", json=json_data, status_code=status_code)
         return UserDTOResponse(**resp)
 
-    # Получение информации о пользователе (должен быть авторизован с помощью токена)
-    def get_user_info(self) -> UserInfoResponse:
-        resp = self.get(f"{self.base_url}/user", status_code=200)
+    def get_user_info(self, status_code: int = 200) -> UserInfoResponse:
+        """Getting information about the user (must be authorized with a token)."""
+        resp = self.get(f"{self.base_url}/user", status_code=status_code)
         return UserInfoResponse(**resp)
 
-    # Обновление пароля у пользователя (должен быть авторизован с помощью токена)
-    def put_user_password(self, new_password: str) -> UserNewPasswordResponse:
+    def put_user_password(self, new_password: str, status_code: int = 200) -> UserNewPasswordResponse:
+        """Updating the user's password (must be authorized with a token)."""
         json_data = {
             "password": new_password
         }
-        resp = self.put(f"{self.base_url}/user", json=json_data, status_code=200)
+        resp = self.put(f"{self.base_url}/user", json=json_data, status_code=status_code)
         self.password = new_password
         return UserNewPasswordResponse(**resp)
 
-    # Удаление пользователя из базы данных (должен быть авторизован с помощью токена)
-    def delete_user(self) -> UserDeleteInfoResponse:
-        resp = self.delete(f"{self.base_url}/user", status_code=200)
+    def delete_user(self, status_code: int = 200) -> UserDeleteInfoResponse:
+        """Deleting a user from the database (must be authorized with a token)."""
+        resp = self.delete(f"{self.base_url}/user", status_code=status_code)
         return UserDeleteInfoResponse(**resp)
 
-    # Показать логины всех существующих пользователей
-    def get_users_info(self) -> UsersInfoResponse:
-        resp = self.get(f"{self.base_url}/users", status_code=200)
-        resp_dict = {"response": resp}
+    def get_users_info(self, status_code: int = 200) -> UsersInfoResponse:
+        """Show logins of all existing users."""
+        resp = self.get(f"{self.base_url}/users", status_code=status_code)
+        resp_dict = {"info": resp}
         return UsersInfoResponse(**resp_dict)

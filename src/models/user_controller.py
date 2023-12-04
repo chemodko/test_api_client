@@ -24,7 +24,7 @@ class Info(BaseModel):
 
 class UserDTOResponse(BaseModel):
     info: Info
-    register_data: RegisterData
+    register_data: RegisterData = None
 
 
 class UserInfoResponse(BaseModel):
@@ -43,4 +43,4 @@ class UserDeleteInfoResponse(BaseModel):
 
 
 class UsersInfoResponse(BaseModel):
-    response: list
+    info: list

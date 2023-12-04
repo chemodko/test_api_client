@@ -20,12 +20,21 @@ class HttpApiClient:
         token_resp = self.post(f"{self.base_url}/login", json=log_in_data, status_code=200)
         self.set_token(token_resp["token"])
 
+    def can_auth(self) -> bool:
+        log_in_data = {
+            "username": self.login,
+            "password": self.password
+        }
+        status_code = self.session.request("post", f"{self.base_url}/login", json=log_in_data).status_code
+        return status_code == 200
+
     def auth(self) -> None:
         """Calls log_in method and sets the authorization headers."""
         self.__log_in()
         self.headers["Authorization"] = f"Bearer {self.token}"
 
-    def __base_call(self, method: str, url: str, params: dict = None, data: dict = None, json: dict = None, status_code: int = 200) -> dict:
+    def __base_call(self, method: str, url: str, params: dict = None, data: dict = None, json: dict = None,
+                    status_code: int = 200) -> dict:
         """
         Makes an HTTP request using the provided method, url, and parameters.
 
@@ -76,6 +85,3 @@ class HttpApiClient:
                f"URL: {self.base_url}\n" \
                f"LOGIN: {self.login}\n" \
                f"PASSWORD: {self.password}\n"
-
-
-
