@@ -3,16 +3,11 @@ from src.models.jwt_authentication import AuthenticationResponse
 
 
 class JwtAuthenticationApiClient(HttpApiClient):
-    def post_create_auth_token(self) -> AuthenticationResponse:
+    def post_create_auth_token(self, login: str = None, password: str = None, status_code: int = 200) -> AuthenticationResponse:
         log_in_data = {
-            "username": self.login,
-            "password": self.password
+            "username": login,
+            "password": password
         }
-        token_resp = self.post(f"{self.base_url}/login", json=log_in_data, status_code=200)
-        # self.set_token(token_resp["token"])
+        token_resp = self.post(f"{self.base_url}/login", json=log_in_data, status_code=status_code)
         return AuthenticationResponse(**token_resp)
 
-    # def auth(self) -> None:
-    #     """Calls log_in method and sets the authorization headers."""
-    #     self.__log_in()
-    #     self.headers["Authorization"] = f"Bearer {self.token}"
