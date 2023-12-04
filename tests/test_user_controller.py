@@ -9,18 +9,23 @@ def test_register_user_positive(user_controller):
     user_controller.post_new_user(test_login, "password", status_code=201)
 
 
-@pytest.mark.parametrize("login,password", [("admin", "string"),
-                                            (None, "password"),
+@pytest.mark.parametrize("login,password", [("admin", random_string()),
+                                            (None, random_string()),
                                             (None, None),
                                             (random_string(), None)])
 def test_register_user_negative(user_controller, login, password):
     user_controller.post_new_user(login, password, status_code=400)
 
 
-def test_get_user_info(user_controller):
+def test_get_user_info_positive(user_controller):
     user_controller.post_new_user(user_controller.login, user_controller.password, status_code=201)
     user_controller.auth()
     user_controller.get_user_info(status_code=200)
+
+
+def test_get_user_info_negative(user_controller):
+    user_controller.post_new_user(user_controller.login, user_controller.password, status_code=201)
+    user_controller.get_user_info(status_code=401)
 
 
 def test_put_new_user_password(user_controller):
