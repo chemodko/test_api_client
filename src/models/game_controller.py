@@ -10,23 +10,23 @@ class Requirements(BaseModel):
 
 
 class SimilarDLC(BaseModel):
-    dlc_name_from_another_game: str = Field(alias="dlcNameFromAnotherGame")
-    is_free: bool = Field(alias="isFree")
+    dlc_name_from_another_game: str = Field(alias="dlcNameFromAnotherGame", default=None)
+    is_free: bool = Field(alias="isFree", default=None)
 
 
 class DLC(BaseModel):
-    description: str
-    dlc_name: str = Field(alias="dlcName")
-    is_dlc_free: bool = Field(alias="isDlcFree")
-    price: float
-    rating: float
-    similar_dlc: SimilarDLC = Field(alias="similarDlc")
+    description: str = None
+    dlc_name: str = Field(alias="dlcName", default=None)
+    is_dlc_free: bool = Field(alias="isDlcFree", default=None)
+    price: float = None
+    rating: float = None
+    similar_dlc: SimilarDLC = Field(alias="similarDlc", default=None)
 
 
 class Game(BaseModel):
     company: str
     description: str
-    dlcs: list[DLC]
+    dlcs: list[DLC] = None
     game_id: int = Field(alias="gameId")
     genre: str
     is_free: bool = Field(alias="isFree")

@@ -23,14 +23,16 @@ class GameControllerApiClient(HttpApiClient):
         elif status_code == 401:
             return UnauthorizedError(**resp)
 
-    def post_add_game(self, json_data: dict, status_code: int = 201) -> Union[GameAddedResponse, UnauthorizedError]:
-        resp = self.post(f"{self.base_url}/user/games", json=json_data, status_code=status_code)
+    def post_add_game(self, game_data: dict, status_code: int = 201) -> Union[GameAddedResponse, UnauthorizedError]:
+        """Adds a game for the user (must be authorized with a token)."""
+        resp = self.post(f"{self.base_url}/user/games", json=game_data, status_code=status_code)
         if status_code == 201 or status_code == 400:
             return GameAddedResponse(**resp)
         elif status_code == 401:
             return UnauthorizedError(**resp)
 
     def get_game_info(self, game_id: int, status_code: int = 200) -> Union[Game, InfoResponse, UnauthorizedError]:
+        """Gets information about the game (must be authorized with a token)."""
         resp = self.get(f"{self.base_url}/user/games/{game_id}", status_code=status_code)
         if status_code == 200:
             return Game(**resp)
@@ -40,10 +42,34 @@ class GameControllerApiClient(HttpApiClient):
             return UnauthorizedError(**resp)
 
     def delete_game(self, game_id: int, status_code: int = 200) -> Union[InfoResponse, UnauthorizedError]:
+        """Deletes the user's game (must be authorized with a token)."""
         resp = self.delete(f"{self.base_url}/user/games/{game_id}", status_code=status_code)
         if status_code == 200 or status_code == 400:
             return InfoResponse(**resp)
         elif status_code == 401:
             return UnauthorizedError(**resp)
 
+    def put_update_dlc_list(self, game_id: int, dlc_list: list, status_code: int = 200) -> Union[InfoResponse, UnauthorizedError]:
+        """Updates the game's DLC list (must be authorized with a token)."""
+        resp = self.put(f"{self.base_url}/user/games/{game_id}", json=dlc_list, status_code=status_code)
+        if status_code == 200 or status_code == 400:
+            return InfoResponse(**resp)
+        elif status_code == 401:
+            return UnauthorizedError(**resp)
+
+    def delete_dlc(self, game_id: int, dlc_list: list, status_code: int = 200) -> Union[InfoResponse, UnauthorizedError]:
+        """Deletes the user's game's DLC (must be authorized with a token)."""
+        resp = self.delete(f"{self.base_url}/user/games/{game_id}/dlc", json=dlc_list, status_code=status_code)
+        if status_code == 200 or status_code == 400:
+            return InfoResponse(**resp)
+        elif status_code == 401:
+            return UnauthorizedError(**resp)
+
+    def put_update_game_field(self, game_id: int, field_data: dict, status_code: int = 200) -> Union[InfoResponse, UnauthorizedError]:
+        """Update's the user's game field (must be authorized with a token)."""
+        resp = self.put(f"{self.base_url}/user/games/{game_id}/updateField", json=field_data, status_code=status_code)
+        if status_code == 200 or status_code == 400:
+            return InfoResponse(**resp)
+        elif status_code == 401:
+            return UnauthorizedError(**resp)
 
