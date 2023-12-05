@@ -18,8 +18,32 @@ class GameControllerApiClient(HttpApiClient):
         if status_code == 200:
             games = []
             for r in resp:
-                games.append(**r)
+                games.append(Game(**r))
             return games
         elif status_code == 401:
             return UnauthorizedError(**resp)
+
+    def post_add_game(self, json_data: dict, status_code: int = 201) -> Union[GameAddedResponse, UnauthorizedError]:
+        resp = self.post(f"{self.base_url}/user/games", json=json_data, status_code=status_code)
+        if status_code == 201 or status_code == 400:
+            return GameAddedResponse(**resp)
+        elif status_code == 401:
+            return UnauthorizedError(**resp)
+
+    def get_game_info(self, game_id: int, status_code: int = 200) -> Union[Game, InfoResponse, UnauthorizedError]:
+        resp = self.get(f"{self.base_url}/user/games/{game_id}", status_code=status_code)
+        if status_code == 200:
+            return Game(**resp)
+        elif status_code == 400:
+            return InfoResponse(**resp)
+        elif status_code == 401:
+            return UnauthorizedError(**resp)
+
+    def delete_game(self, game_id: int, status_code: int = 200) -> Union[InfoResponse, UnauthorizedError]:
+        resp = self.delete(f"{self.base_url}/user/games/{game_id}", status_code=status_code)
+        if status_code == 200 or status_code == 400:
+            return InfoResponse(**resp)
+        elif status_code == 401:
+            return UnauthorizedError(**resp)
+
 

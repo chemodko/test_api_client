@@ -1,4 +1,5 @@
 from pydantic import BaseModel, Field
+from src.utils.constants.messages import StatusMessage, UserMessage
 
 
 class Requirements(BaseModel):
@@ -31,7 +32,7 @@ class Game(BaseModel):
     is_free: bool = Field(alias="isFree")
     price: float
     publish_date: str
-    rating: float
+    rating: int
     required_age: int = Field(alias="requiredAge")
     requirements: Requirements
     tags: list[str]
@@ -47,5 +48,19 @@ class UnauthorizedError(BaseModel):
     status: int = 401
     error: str = "Unauthorized"
     path: str
+
+
+class Info(BaseModel):
+    status: StatusMessage
+    message: UserMessage
+
+
+class GameAddedResponse(BaseModel):
+    info: Info
+    register_data: Game = None
+
+
+class InfoResponse(BaseModel):
+    info: Info
 
 

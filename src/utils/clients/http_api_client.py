@@ -33,6 +33,10 @@ class HttpApiClient:
         self.__log_in()
         self.headers["Authorization"] = f"Bearer {self.token}"
 
+    def de_auth(self) -> None:
+        """Removes client authorization."""
+        self.headers["Authorization"] = None
+
     def __base_call(self, method: str, url: str, params: dict = None, data: dict = None, json: dict = None,
                     status_code: int = 200) -> dict:
         """
