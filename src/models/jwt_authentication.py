@@ -2,10 +2,13 @@ from pydantic import BaseModel
 
 
 class AuthenticationResponse(BaseModel):
-    token: str = None
+    token: str
 
-    timestamp: str = None
+
+class UnauthorizedError(BaseModel):
+    timestamp: str
     status: int = 401
     error: str = "Unauthorized"
-    path: str = "/api/user"
+    path: str
+
 

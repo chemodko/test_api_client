@@ -38,3 +38,14 @@ class Game(BaseModel):
     title: str
 
 
+class Games(BaseModel):
+    games: list[Game]
+
+
+class UnauthorizedError(BaseModel):
+    timestamp: str
+    status: int = 401
+    error: str = "Unauthorized"
+    path: str
+
+
