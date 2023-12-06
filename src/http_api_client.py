@@ -20,14 +20,6 @@ class HttpApiClient:
         token_resp = self.post(f"{self.base_url}/login", json=log_in_data, status_code=200)
         self.set_token(token_resp["token"])
 
-    def can_auth(self) -> bool:
-        log_in_data = {
-            "username": self.login,
-            "password": self.password
-        }
-        status_code = self.session.request("post", f"{self.base_url}/login", json=log_in_data).status_code
-        return status_code == 200
-
     def auth(self) -> None:
         """Calls log_in method and sets the authorization headers."""
         self.__log_in()
