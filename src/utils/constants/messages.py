@@ -25,3 +25,6 @@ class UserMessage(Enum):
     cant_find_field = "Cannot find field"
     incorrect_field_type = "Cannot set new value because field has incorrect type"
 
+    def __str__(self) -> str:
+        return self.value
+

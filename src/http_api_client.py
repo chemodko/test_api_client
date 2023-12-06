@@ -38,7 +38,7 @@ class HttpApiClient:
         self.headers["Authorization"] = None
 
     def __base_call(self, method: str, url: str, params: dict = None, data: dict = None, json: dict = None,
-                    status_code: int = 200) -> dict:
+                    status_code: int = 200, **kwargs) -> dict:
         """
         Makes an HTTP request using the provided method, url, and parameters.
 
@@ -58,11 +58,11 @@ class HttpApiClient:
         """
         resp = self.session.request(method, url, headers=self.headers, params=params, data=data, json=json)
         assert resp.status_code == status_code, f"Status code: {resp.status_code}, {resp.text}"
-        return resp.json()
 
-# ** kwargs
-# if exp_msg := kwargs.get("message from test")
-#    assert resp.json()["message"] == exp_msg
+        if exp_msg := kwargs.get("exp_msg"):
+            real_msg = resp.json()["info"]["message"]
+            assert real_msg == exp_msg, f"Expected message: {exp_msg}, real: {real_msg}"
+        return resp.json()
 
     def set_token(self, token: str) -> None:
         """Sets the authentication token."""
@@ -72,21 +72,21 @@ class HttpApiClient:
         """Gets the authentication token."""
         return self.token
 
-    def get(self, url: str, params: dict = None, status_code: int = 200) -> dict:  # **kwargs
+    def get(self, url: str, params: dict = None, status_code: int = 200, **kwargs) -> dict:
         """Makes a GET request."""
-        return self.__base_call("get", url, params=params, status_code=status_code)
+        return self.__base_call("get", url, params=params, status_code=status_code, **kwargs)
 
-    def post(self, url: str, data: dict = None, json: dict = None, status_code: int = 201) -> dict:
+    def post(self, url: str, data: dict = None, json: dict = None, status_code: int = 201, **kwargs) -> dict:
         """Makes a POST request."""
-        return self.__base_call("post", url, data=data, json=json, status_code=status_code)
+        return self.__base_call("post", url, data=data, json=json, status_code=status_code, **kwargs)
 
-    def put(self, url: str, data: dict = None, json: dict = None, status_code: int = 200) -> dict:
+    def put(self, url: str, data: dict = None, json: dict = None, status_code: int = 200, **kwargs) -> dict:
         """Makes a PUT request."""
-        return self.__base_call("put", url, data=data, json=json, status_code=status_code)
+        return self.__base_call("put", url, data=data, json=json, status_code=status_code, **kwargs)
 
-    def delete(self, url: str, data: dict = None, json: dict = None, status_code: int = 200) -> dict:
+    def delete(self, url: str, data: dict = None, json: dict = None, status_code: int = 200, **kwargs) -> dict:
         """Makes a DELETE request."""
-        return self.__base_call("delete", url, data=data, json=json, status_code=status_code)
+        return self.__base_call("delete", url, data=data, json=json, status_code=status_code, **kwargs)
 
     def __str__(self):
         return f"\nTOKEN: {self.token}\n" \

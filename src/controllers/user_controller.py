@@ -5,7 +5,8 @@ from src.http_api_client import HttpApiClient
 
 
 class UserControllerApiClient(HttpApiClient):
-    def post_api_signup(self, login: str = None, password: str = None, games: list = None, status_code: int = 201) -> UserDTOResponse:
+    def post_api_signup(self, login: str = None, password: str = None, games: list = None, status_code: int = 201,
+                        exp_msg: str = None) -> UserDTOResponse:
         """Registration of a new user in the system."""
         if games is None:
             games = []
@@ -16,7 +17,7 @@ class UserControllerApiClient(HttpApiClient):
             "pass": self.password,
             "games": games
         }
-        resp = self.post(f"{self.base_url}/signup", json=json_data, status_code=status_code)
+        resp = self.post(f"{self.base_url}/signup", json=json_data, status_code=status_code, exp_msg=exp_msg)
         return UserDTOResponse(**resp)
 
     def get_user_info(self, status_code: int = 200) -> Union[UserInfoResponse, UnauthorizedError]:
@@ -39,16 +40,15 @@ class UserControllerApiClient(HttpApiClient):
         elif status_code == 401:
             return UnauthorizedError(**resp)
 
-    def delete_user(self, status_code: int = 200) -> Union[UserDeleteInfoResponse, UnauthorizedError]:
+    def delete_user(self, status_code: int = 200, exp_msg: str = None) -> UserDeleteInfoResponse:
         """Deleting a user from the database (must be authorized with a token)."""
-        resp = self.delete(f"{self.base_url}/user", status_code=status_code)
+        resp = self.delete(f"{self.base_url}/user", status_code=status_code, exp_msg=exp_msg)
         if status_code == 200:
             self.headers = None
-
-        if status_code == 200 or status_code == 400:
-            return UserDeleteInfoResponse(**resp)
-        elif status_code == 401:
-            return UnauthorizedError(**resp)
+        # if status_code == 200 or status_code == 400:
+        return UserDeleteInfoResponse(**resp)
+        # elif status_code == 401:
+        #     return UnauthorizedError(**resp)
 
     def get_users_info(self, status_code: int = 200) -> UsersInfoResponse:
         """Show logins of all existing users."""
