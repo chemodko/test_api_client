@@ -1,7 +1,7 @@
 from typing import Union
 
 from src.models.game_controller import *
-from src.utils.clients.http_api_client import HttpApiClient
+from src.http_api_client import HttpApiClient
 
 
 class GameControllerApiClient(HttpApiClient):

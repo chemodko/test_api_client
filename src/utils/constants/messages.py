@@ -8,9 +8,9 @@ class StatusMessage(Enum):
 
 class UserMessage(Enum):
     user_created = "User created"
-    exist = "Login already exist"
+    login_exist = "Login already exist"
     miss = "Missing login or password"
-    changed = "User password successfully changed"
+    pass_changed = "User password successfully changed"
     empty_pass = "Body has no password parameter"
     user_deleted = "User successfully deleted"
 

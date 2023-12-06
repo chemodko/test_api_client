@@ -1,6 +1,6 @@
 from typing import Union
 
-from src.utils.clients.http_api_client import HttpApiClient
+from src.http_api_client import HttpApiClient
 from src.models.jwt_authentication import AuthenticationResponse, UnauthorizedError
 
 

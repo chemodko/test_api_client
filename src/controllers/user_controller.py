@@ -1,17 +1,20 @@
 from typing import Union
 
 from src.models.user_controller import *
-from src.utils.clients.http_api_client import HttpApiClient
+from src.http_api_client import HttpApiClient
 
 
 class UserControllerApiClient(HttpApiClient):
-    def post_new_user(self, login: str = None, password: str = None, status_code: int = 201) -> UserDTOResponse:
+    def post_api_signup(self, login: str = None, password: str = None, games: list = None, status_code: int = 201) -> UserDTOResponse:
         """Registration of a new user in the system."""
+        if games is None:
+            games = []
         self.login = login
         self.password = password
         json_data = {
             "login": self.login,
-            "pass": self.password
+            "pass": self.password,
+            "games": games
         }
         resp = self.post(f"{self.base_url}/signup", json=json_data, status_code=status_code)
         return UserDTOResponse(**resp)

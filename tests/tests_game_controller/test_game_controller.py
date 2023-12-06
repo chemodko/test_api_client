@@ -1,5 +1,6 @@
 from src.utils.randoms import random_number
 from tests.games import games, dlcs
+from src.models.game_controller import GameFactory
 import pytest
 
 
@@ -21,7 +22,8 @@ def test_get_games_list_unauthorized(game_controller):
 
 def test_add_game_positive(game_controller):
     game_controller.auth()
-    game = games[0]
+    # game = games[0]
+    game = GameFactory().model_dump(by_alias=True)
     game_controller.post_add_game(game, status_code=201)
 
 
@@ -60,7 +62,7 @@ def test_get_game_info_unauthorized(game_controller):
     game = games[0]
     game_controller.post_add_game(game, status_code=201)
     game_id = game_controller.get_games_list(status_code=200)[0].game_id
-    game_controller.de_auth()
+    game_controller.logout()
     game_controller.get_game_info(game_id=game_id, status_code=401)
 
 
@@ -82,7 +84,7 @@ def test_delete_game_unauthorized(game_controller):
     game = games[0]
     game_controller.post_add_game(game, status_code=201)
     game_id = game_controller.get_games_list(status_code=200)[0].game_id
-    game_controller.de_auth()
+    game_controller.logout()
     game_controller.delete_game(game_id=game_id, status_code=401)
 
 
@@ -120,7 +122,7 @@ def test_update_dlc_list_unauthorized(game_controller):
     game = games[0]
     game_controller.post_add_game(game)
     game_id = game_controller.get_games_list(status_code=200)[0].game_id
-    game_controller.de_auth()
+    game_controller.logout()
     game_controller.put_update_dlc_list(game_id=game_id, dlc_list=dlcs, status_code=401)
 
 
@@ -150,7 +152,7 @@ def test_delete_dlc_unauthorized(game_controller):
     game = games[1]
     game_controller.post_add_game(game)
     game_id = game_controller.get_games_list()[0].game_id
-    game_controller.de_auth()
+    game_controller.logout()
     game_controller.delete_dlc(game_id=game_id, dlc_list=dlcs, status_code=401)
 
 
@@ -209,7 +211,7 @@ def test_update_game_field_unauthorized(game_controller):
         "fieldName": "description",
         "value": "NEW DESCRIPTION"
     }
-    game_controller.de_auth()
+    game_controller.logout()
     game_controller.put_update_game_field(game_id=game_id, field_data=field_data, status_code=401)
 
 

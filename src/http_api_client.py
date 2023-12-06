@@ -33,7 +33,7 @@ class HttpApiClient:
         self.__log_in()
         self.headers["Authorization"] = f"Bearer {self.token}"
 
-    def de_auth(self) -> None:
+    def logout(self) -> None:
         """Removes client authorization."""
         self.headers["Authorization"] = None
 
@@ -60,6 +60,10 @@ class HttpApiClient:
         assert resp.status_code == status_code, f"Status code: {resp.status_code}, {resp.text}"
         return resp.json()
 
+# ** kwargs
+# if exp_msg := kwargs.get("message from test")
+#    assert resp.json()["message"] == exp_msg
+
     def set_token(self, token: str) -> None:
         """Sets the authentication token."""
         self.token = token
@@ -68,7 +72,7 @@ class HttpApiClient:
         """Gets the authentication token."""
         return self.token
 
-    def get(self, url: str, params: dict = None, status_code: int = 200) -> dict:
+    def get(self, url: str, params: dict = None, status_code: int = 200) -> dict:  # **kwargs
         """Makes a GET request."""
         return self.__base_call("get", url, params=params, status_code=status_code)
 
