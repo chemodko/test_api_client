@@ -20,11 +20,7 @@ class UserDTOResponse(BaseModel):
     register_data: UserInfoResponse = None
 
 
-class UserNewPasswordResponse(BaseModel):
-    info: Info
-
-
-class UserDeleteInfoResponse(BaseModel):
+class InfoResponse(BaseModel):
     info: Info
 
 

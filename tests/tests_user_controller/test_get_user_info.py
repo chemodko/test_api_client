@@ -1,44 +1,14 @@
-from src.utils.constants.messages import UserMessage
+from src.models.user_controller import UserInfoResponse, UnauthorizedError
 
 
-def test_get_user_info_positive(user_controller):
-    user_controller.post_api_signup(user_controller.login, user_controller.password, status_code=201)
-    user_controller.auth()
-    user_controller.get_user_info(status_code=200)
+class TestGetUserInfo:
+    def test_get_user_info(self, user_controller_post_user_auth):
+        resp = user_controller_post_user_auth.get_user_info(status_code=200, model=UserInfoResponse)
 
+        assert resp.login == user_controller_post_user_auth.login, "Invalid login"
+        assert resp.password == user_controller_post_user_auth.password, "Invalid password"
+        assert resp.games == [], "Invalid games list"
 
-def test_get_user_info_unauthorized(user_controller):
-    user_controller.post_api_signup(user_controller.login, user_controller.password, status_code=201)
-    user_controller.get_user_info(status_code=401)
+    def test_get_user_info_unauthorized(self, user_controller_post_user):
+        user_controller_post_user.get_user_info(status_code=401, model=UnauthorizedError)
 
-
-def test_put_new_user_password_positive(user_controller):
-    user_controller.post_api_signup(user_controller.login, user_controller.password, status_code=201)
-    user_controller.auth()
-    user_controller.put_user_password("newpassword", status_code=200)
-
-
-def test_put_new_user_password_unauthorized(user_controller):
-    # user_controller.post_new_user(user_controller.login, user_controller.password, status_code=201)
-    user_controller.put_user_password("newpassword", status_code=401)
-
-
-def test_put_new_user_password_wrong(user_controller):
-    user_controller.post_api_signup(user_controller.login, user_controller.password, status_code=201)
-    user_controller.auth()
-    user_controller.put_user_password(None, status_code=400)
-
-
-def test_delete_user_positive(user_controller):
-    user_controller.post_api_signup(user_controller.login, user_controller.password, status_code=201)
-    user_controller.auth()
-    user_controller.delete_user(status_code=200)
-
-
-def test_delete_user_positive_negative(user_controller):
-    user_controller.post_api_signup(user_controller.login, user_controller.password, status_code=201)
-    user_controller.delete_user(status_code=401)
-
-
-def test_get_all_users_logins(user_controller):
-    user_controller.get_users_info(status_code=200)
