@@ -49,10 +49,6 @@ class GameControllerApiClient(HttpApiClient):
     def put_update_game_field(self, game_id: int, field_data: dict, status_code: int = 200, exp_msg: str = None, model=InfoResponse):
         """Update's the user's game field (must be authorized with a token)."""
         resp = self.put(f"{self.base_url}/user/games/{game_id}/updateField", json=field_data, status_code=status_code, exp_msg=exp_msg)
-        # if status_code == 200 or status_code == 400:
-        #     return InfoResponse(**resp)
-        # elif status_code == 401:
-        #     return UnauthorizedError(**resp)
         return model(**resp)
 
 
