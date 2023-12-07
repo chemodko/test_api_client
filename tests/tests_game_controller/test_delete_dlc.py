@@ -8,7 +8,7 @@ class TestDeleteDLC:
     @pytest.mark.skip("DLCs are not deleted")
     def test_delete_dlc(self, game_controller_auth_post_game_delete):
         game_id = game_controller_auth_post_game_delete.get_games_list()[0].game_id
-        dlcs = [d.dict() for d in game_controller_auth_post_game_delete.get_game_info(game_id=game_id).dlcs]
+        dlcs = [d.model_dump() for d in game_controller_auth_post_game_delete.get_game_info(game_id=game_id).dlcs]
         game_controller_auth_post_game_delete.delete_dlc(game_id=game_id, dlc_list=dlcs, status_code=200,
                                                          exp_msg=GameMessage.dlc_deleted.value)
         assert len(game_controller_auth_post_game_delete.get_game_info(game_id=game_id).dlcs) == 0
@@ -24,7 +24,7 @@ class TestDeleteDLC:
 
     def test_delete_dlc_unauthorized(self, game_controller_auth_post_game_delete):
         game_id = game_controller_auth_post_game_delete.get_games_list()[0].game_id
-        dlcs = [d.dict() for d in game_controller_auth_post_game_delete.get_game_info(game_id=game_id).dlcs]
+        dlcs = [d.model_dump() for d in game_controller_auth_post_game_delete.get_game_info(game_id=game_id).dlcs]
         game_controller_auth_post_game_delete.logout()
         game_controller_auth_post_game_delete.delete_dlc(game_id=game_id, dlc_list=dlcs, status_code=401,
                                                          model=UnauthorizedError)

@@ -1,3 +1,4 @@
+import allure
 from src.models.game_controller import *
 from src.http_api_client import HttpApiClient
 
@@ -10,6 +11,7 @@ class GameControllerApiClient(HttpApiClient):
         if password is not None:
             self.password = password
 
+    @allure.step("Getting list of games")
     def get_games_list(self, status_code: int = 200, model=Game):
         """Getting games list of the user (must be authorized with a token)."""
         resp = self.get(f"{self.base_url}/user/games", status_code=status_code)
@@ -21,31 +23,37 @@ class GameControllerApiClient(HttpApiClient):
         else:
             return model(**resp)
 
+    @allure.step("Adding new game")
     def post_add_game(self, game_data: dict, status_code: int = 201, exp_msg: str = None, model=GameAddedResponse):
         """Adds a game for the user (must be authorized with a token)."""
         resp = self.post(f"{self.base_url}/user/games", json=game_data, status_code=status_code, exp_msg=exp_msg)
         return model(**resp)
 
+    @allure.step("Getting game info")
     def get_game_info(self, game_id: int, status_code: int = 200, exp_msg: str = None, model=Game):
         """Gets information about the game (must be authorized with a token)."""
         resp = self.get(f"{self.base_url}/user/games/{game_id}", status_code=status_code, exp_msg=exp_msg)
         return model(**resp)
 
+    @allure.step("Game deleting")
     def delete_game(self, game_id: int, status_code: int = 200, exp_msg: str = None, model=InfoResponse):
         """Deletes the user's game (must be authorized with a token)."""
         resp = self.delete(f"{self.base_url}/user/games/{game_id}", status_code=status_code, exp_msg=exp_msg)
         return model(**resp)
 
+    @allure.step("Updating list of DLC")
     def put_update_dlc_list(self, game_id: int, dlc_list: list, status_code: int = 200, exp_msg: str = None, model=InfoResponse):
         """Updates the game's DLC list (must be authorized with a token)."""
         resp = self.put(f"{self.base_url}/user/games/{game_id}", json=dlc_list, status_code=status_code, exp_msg=exp_msg)
         return model(**resp)
 
+    @allure.step("Deleting DLC")
     def delete_dlc(self, game_id: int, dlc_list: list, status_code: int = 200, exp_msg: str = None, model=InfoResponse):
         """Deletes the user's game's DLC (must be authorized with a token)."""
         resp = self.delete(f"{self.base_url}/user/games/{game_id}/dlc", json=dlc_list, status_code=status_code, exp_msg=exp_msg)
         return model(**resp)
 
+    @allure.step("Updating game field")
     def put_update_game_field(self, game_id: int, field_data: dict, status_code: int = 200, exp_msg: str = None, model=InfoResponse):
         """Update's the user's game field (must be authorized with a token)."""
         resp = self.put(f"{self.base_url}/user/games/{game_id}/updateField", json=field_data, status_code=status_code, exp_msg=exp_msg)

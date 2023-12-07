@@ -1,22 +1,28 @@
+import allure
 from src.models.user_controller import UnauthorizedError
 from src.utils.constants.messages import UserMessage
 
 
+@allure.feature("Updating user password")
 class TestPutNewPassword:
+    @allure.title("Put new password to user")
     def test_put_new_user_password(self, user_controller_post_user_auth):
         newpassword = "newpassword"
         user_controller_post_user_auth.put_user_password(new_password=newpassword, status_code=200,
                                                          exp_msg=UserMessage.pass_changed.value)
         assert newpassword == user_controller_post_user_auth.get_user_info().password
 
+    @allure.title("Put new password to user without authentication")
     def test_put_new_user_password_unauthorized(self, user_controller_post_user):
         user_controller_post_user.put_user_password(new_password="newpassword", status_code=401,
                                                     model=UnauthorizedError)
 
+    @allure.title("Put new password to user, empty password")
     def test_put_new_user_password_wrong(self, user_controller_post_user_auth):
         user_controller_post_user_auth.put_user_password(new_password=None, status_code=400,
                                                          exp_msg=UserMessage.empty_pass.value)
 
+    @allure.title("Checking that authentication with old password is impossible")
     def test_check_authorize_after_password_change(self, user_controller_post_user_auth):
         old_password = user_controller_post_user_auth.password
         new_password = "newpassword"

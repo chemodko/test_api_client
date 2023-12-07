@@ -2,9 +2,12 @@ import pytest
 from src.utils.randoms import random_string
 from src.utils.constants.messages import UserMessage
 from src.models.game_controller import GameFactory
+import allure
 
 
+@allure.feature("Register user")
 class TestRegisterUser:
+    @allure.title("Register new user")
     def test_register_new_user(self, user_controller):
         login = random_string(20, 20)
         password = random_string(20, 20)
@@ -15,22 +18,27 @@ class TestRegisterUser:
         assert resp.register_data.password == password, "Invalid password"
         assert resp.register_data.games == [], "Invalid games list"
 
+    @allure.title("Register user that exist")
     def test_register_user_that_exist(self, user_controller_without_deleting):
         user_controller_without_deleting.post_api_signup(login="admin", password=random_string(),
                                                          status_code=400, exp_msg=UserMessage.login_exist.value)
 
+    @allure.title("Register user without login")
     def test_register_user_without_login(self, user_controller_without_deleting):
         user_controller_without_deleting.post_api_signup(login=None, password=random_string(),
                                                          status_code=400, exp_msg=UserMessage.miss.value)
 
+    @allure.title("Register user without password")
     def test_register_user_without_password(self, user_controller_without_deleting):
         user_controller_without_deleting.post_api_signup(login=random_string(), password=None,
                                                          status_code=400, exp_msg=UserMessage.miss.value)
 
+    @allure.title("Register user without login and password")
     def test_register_user_without_login_and_password(self, user_controller_without_deleting):
         user_controller_without_deleting.post_api_signup(login=None, password=None,
                                                          status_code=400, exp_msg=UserMessage.miss.value)
 
+    @allure.title("Register user with list of games")
     @pytest.mark.skip(reason="Always causes 500 Internal server error")
     def test_register_new_user_with_games(self, user_controller):
         login = random_string(20, 20)

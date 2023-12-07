@@ -1,2 +1,2 @@
-pytest_plugins = ["tests.fixtures.user_fixtures"]
-
+# pytest_plugins = ["tests.fixtures.user_fixtures"]
+#
