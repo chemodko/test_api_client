@@ -7,7 +7,7 @@ import allure
 
 @allure.feature("Register user")
 class TestRegisterUser:
-    @allure.title("Register new user")
+    @allure.title("Register new user with login and password")
     def test_register_new_user(self, user_controller):
         login = random_string(20, 20)
         password = random_string(20, 20)
