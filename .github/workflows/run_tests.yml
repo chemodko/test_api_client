@@ -28,11 +28,11 @@ jobs:
         run: python -m pytest -s -v --reruns 5 --reruns-delay 1 --alluredir=allure_results
       - name: Store allure results
         uses: actions/upload-artifact@v4
-          with:
-            name: allure_results
-            path:
-              allure_results
-            retention-days: 1
+        with:
+          name: allure_results
+          path:
+            allure_results
+          retention-days: 1
 
   generate-report:
     runs-on: ubuntu-latest
