@@ -11,6 +11,11 @@ on:
         options:
           - all_tests
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   test-run:
     runs-on: ubuntu-latest
