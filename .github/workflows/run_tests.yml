@@ -1,7 +1,13 @@
 name: Automated API tests
 
-on:
-  push
+on: workflow_dispatch
+#    inputs:
+#      deployment_target:
+#        descritpion: Choose target
+#        required: true
+#        default:
+#        type: choice
+#        options:
 
 jobs:
   test:
