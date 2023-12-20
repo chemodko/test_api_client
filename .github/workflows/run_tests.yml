@@ -18,7 +18,7 @@ permissions:
 
 jobs:
   download-history: # old allure reports
-    # if: false
+    if: false
     runs-on: ubuntu-latest
     name: Download history
     steps:
